@@ -1,0 +1,21 @@
+/* custom-navbar.css */
+.custom-navbar {
+  background-color: rgba(163, 0, 188, 0.685) !important;
+  backdrop-filter: blur(10px) !important;
+  color: white !important;
+}
+
+.custom-navbar a,
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-item {
+  color: white !important;
+}
+
+.custom-navbar .dropdown-menu {
+  background-color: rgba(163, 0, 188, 0.9) !important;
+}
+
+.dropdown-link:hover{
+  background-color: rgba(223, 14, 255, 0.685);
+}

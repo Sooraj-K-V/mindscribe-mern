@@ -1,0 +1,28 @@
+input {
+    background-color: rgb(251, 244, 253);
+    padding: 6px;
+    border-radius: 6px;
+    
+}
+
+textarea {
+    border-radius: 6px;
+    background-color: rgb(254, 248, 255);
+    padding: 10px;
+}
+
+textarea:focus {
+    outline: none;
+    border: none;
+}
+
+.add-button{
+    border-radius: 6px;
+    background-color: purple;
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+.add-button:hover{
+    background-color: rgb(179, 0, 179);
+}
