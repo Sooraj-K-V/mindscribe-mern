@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AddJournal from "../components/AddJournal";
 import MyJournals from "../components/MyJournals";
 import DashboardComp from "../components/DashboardComp";
+
 const drawerWidth = 240;
 
 const navItems = [
@@ -40,19 +41,23 @@ const navItems = [
 ];
 
 export default function Dashboard() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [navPath, setNavPath] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("dashboard");
   const navigate = useNavigate();
-  const [showAddJournal, setShowAddJournal] = useState(false);
-  const [showMyJournal, setShowMyJournal] = useState(false);
-  const [showDashboardContent, setShowDashboardContent] = useState(true);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  // child to parent handle function
-  const handleData = (data) => {
-    console.log("Received from child:", data);
+
+  const handleNavAction = (action) => {
+    if (action === "logout") {
+      localStorage.removeItem("token");
+      navigate("/");
+      console.log("Logged out");
+    } else {
+      setActiveTab(action);
+    }
+    setMobileOpen(false); // close drawer on mobile
   };
 
   const drawer = (
@@ -65,25 +70,7 @@ export default function Dashboard() {
             <ListItemButton
               component={item.path ? Link : "button"}
               to={item.path}
-              onClick={() => {
-                if (item.action === "logout") {
-                  localStorage.removeItem("token");
-                  navigate("/");
-                  console.log("logged out");
-                } else if (item.action === "addjournal") {
-                  setShowAddJournal(true);
-                  setShowMyJournal(false);
-                  setShowDashboardContent(false);
-                } else if (item.action === "myjournals") {
-                  setShowMyJournal(true);
-                  setShowAddJournal(false);
-                  setShowDashboardContent(false);
-                } else if (item.action === "dashboard") {
-                  setShowDashboardContent(true);
-                  setShowMyJournal(false);
-                  setShowAddJournal(false);
-                }
-              }}
+              onClick={() => handleNavAction(item.action)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -93,6 +80,8 @@ export default function Dashboard() {
       </List>
     </div>
   );
+
+  const username = localStorage.getItem("name") || "User";
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -135,7 +124,7 @@ export default function Dashboard() {
           {drawer}
         </Drawer>
 
-        {/* Permanent Drawer on Desktop */}
+        {/* Permanent Drawer */}
         <Drawer
           variant="permanent"
           sx={{
@@ -156,6 +145,7 @@ export default function Dashboard() {
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           backdropFilter: "blur(15px)",
+          height: "100vh",
         }}
       >
         <Toolbar />
@@ -166,9 +156,9 @@ export default function Dashboard() {
             color: "white",
           }}
         >
-          {showAddJournal && <AddJournal onSendData={handleData} />}
-          {showMyJournal && <MyJournals />}
-          {showDashboardContent && <DashboardComp />}
+          {activeTab === "dashboard" && <DashboardComp username={username} />}
+          {activeTab === "addjournal" && <AddJournal />}
+          {activeTab === "myjournals" && <MyJournals />}
         </Box>
       </Box>
     </Box>

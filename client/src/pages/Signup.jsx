@@ -45,7 +45,7 @@ function Signup() {
       });
       console.error("Error:", err.response?.data || err.message);
       setErrorMessage(err.response?.data?.message || "Something went wrong");
-      navigate("/signup")
+      navigate("/signup");
     }
   };
 
@@ -78,12 +78,12 @@ function Signup() {
           onChange={handleChange}
         />
         <div className="m-2 d-flex flex-column  justify-content-center align-items-center">
-          <button type="submit">Sign-up</button>
+          <button type="submit">Sign-up</button>{" "}
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <p className="p-0 m-0">or</p>
           <Link to="/login" className="text-white">
             login
           </Link>
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         </div>
       </form>
     </div>

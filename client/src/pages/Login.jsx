@@ -7,8 +7,8 @@ function Login() {
     email: "",
     password: "",
   });
-  const navigate = useNavigate()
-  const [errMsg, setErrMsg] = useState("");
+  const navigate = useNavigate();
+  const [errMsg, setErrMsg] = useState(false);
 
   const handleChange = (e) => {
     setUserDetails((prev) => ({
@@ -24,17 +24,19 @@ function Login() {
         "http://localhost:3000/api/user/login",
         userDetails
       );
-      console.log(res.data.token);
+      // console.log(res.data.token);
       const token = res.data.token;
+      const name = res.data.user.name;
       localStorage.setItem("token", token);
+      localStorage.setItem("name", name);
       setUserDetails({
         email: "",
         password: "",
       });
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (err) {
-      setErrMsg(err.response?.data?.message);
-      console.error(err.response?.data?.message);
+      setErrMsg(true);
+      console.error("Error : ",errMsg);
     }
   };
 
@@ -60,11 +62,12 @@ function Login() {
         />
         <div className="m-2 d-flex flex-column  justify-content-center align-items-center">
           <button type="submit">Login</button>
+          {!errMsg ? <p></p> : <p className="text-danger">incorrect inputs</p>}
           <p className="p-0 m-0">or</p>
           <Link to="/signup" className="text-white">
             sign-up
           </Link>
-          {errMsg && <p>{errMsg}</p>}
+          
         </div>
       </form>
     </div>

@@ -45,7 +45,7 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
 
-    if (!user) {
+    if (!user) { 
       console.log("User not found");
       return res.status(404).json({ error: "No user found" });
     }
@@ -55,7 +55,7 @@ export const loginUser = async (req, res) => {
       return res.status(401).json({ error: "Incorrect password" });
     }
     const token = generateJwt(user)
-    console.log("Login successful");
+    console.log(`${user.name} Login successful`);
     res.json({
       message: `${user.name} logged in successfully!`,
       token,

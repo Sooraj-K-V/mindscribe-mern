@@ -5,17 +5,32 @@ import axios from "axios";
 function AddJournal({ onSendData }) {
   const [journalDetails, setJournalDetails] = useState({
     title: "",
-    journal: "",
+    content: "",
   });
   const [errMsg, setErrMsg] = useState("");
   const addJournal = "addjournal";
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = axios.post(
+      const token = localStorage.getItem("token");
+      // console.log("Token ", token);
+
+      const res = await axios.post(
         "http://localhost:3000/api/user/journals",
-        journalDetails
+        journalDetails,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+      setJournalDetails({
+        title: "",
+        content: "",
+      });
+      if (typeof onSendData === "function") {
+        onSendData("addjournal");
+      }
       console.log(res.data);
     } catch (error) {
       console.error(error.message);
@@ -36,27 +51,30 @@ function AddJournal({ onSendData }) {
         <form onSubmit={handleSubmit}>
           <div className="">
             <input
+              required
               type="text"
               name="title"
               placeholder="Title"
               className="my-3"
               onChange={handlChange}
+              value={journalDetails.title}
             />
             <textarea
+              required
               style={{ width: "100%" }}
               onChange={handlChange}
-              name="jounal"
-              id="journal"
+              name="content"
+              id="content"
               placeholder="Journal..."
               className=""
               rows="6"
               cols="45"
+              value={journalDetails.content}
             ></textarea>
             <div style={{ textAlign: "center" }}>
               <button
                 className="add-button px-4 py-1 border-0 my-3"
                 type="submit"
-                onClick={() => onSendData(addJournal)}
               >
                 Add
               </button>

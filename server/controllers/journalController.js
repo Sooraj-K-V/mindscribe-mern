@@ -10,9 +10,9 @@ export const addUserJournals = async (req, res) => {
       content,
       user: userId,
     });
-    
-    await newJournal.save(); 
-    
+
+    await newJournal.save();
+
     const user = await User.findById(userId).lean();
 
     res.json({
@@ -29,7 +29,10 @@ export const getUserJournals = async (req, res) => {
     const userId = req.user.id; // Get the logged-in user ID from the token
 
     // Find journals linked to this user and populate the 'user' field to get the name
-    const journals = await Journal.find({ user: userId }).populate("user", "name");
+    const journals = await Journal.find({ user: userId }).populate(
+      "user",
+      "name"
+    );
 
     res.status(200).json(journals);
   } catch (error) {
@@ -37,7 +40,6 @@ export const getUserJournals = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
 
 export const updateJournal = async (req, res) => {
   try {
@@ -71,12 +73,15 @@ export const deleteJournal = async (req, res) => {
     const userId = req.user.id;
     const journalId = req.params.journalId;
 
-    const deletedJournal = await Journal.findByIdAndDelete({_id: journalId, user: userId});
-    if(!deletedJournal){
-    res.status(401).json({message: "deletion failed"})
+    const deletedJournal = await Journal.findOneAndDelete({
+      _id: journalId,
+      user: userId,
+    });
+    if (!deletedJournal) {
+      res.status(401).json({ message: "deletion failed" });
     }
-    res.json({message: `Successfully deleted.`})
+    res.json({ message: `Successfully deleted.` });
   } catch (error) {
-    res.json(error.message)
+    res.json(error.message);
   }
-}
+};

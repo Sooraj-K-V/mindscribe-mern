@@ -7,6 +7,8 @@ export const authenticate = (req, res, next) => {
   const authHeader = req.header("Authorization");
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.log("Access denied. No token provided");
+    
     return res.status(401).json({ error: "Access denied. No token provided." });
   }
 
@@ -17,6 +19,8 @@ export const authenticate = (req, res, next) => {
     req.user = verified; // Attach user data (including user ID) to the request
     next();
   } catch (error) {
+    console.log("Invalid Token");
+    
     res.status(401).json({ message: "Invalid Token" });
   }
 }; 

@@ -1,10 +1,10 @@
 import React from "react";
 
-function DashboardComp() {
+function DashboardComp(props) {
   return (
     <div>
       <h1 style={{ textAlign: "center"}}>
-        MINDSCRIBE
+        Hi {props.username}, welcome to Mindscribe
       </h1>
 
       <p
